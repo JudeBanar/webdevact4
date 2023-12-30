@@ -13,13 +13,18 @@ function App() {
       return;
     }
 
-    const item = {
+    const task = {
       id: Math.floor(Math.random() * 1000),
       value: newTask
     };
 
-    setTasks(oldList => [...oldList, tasks]);
+    setTasks(oldList => [...oldList, task]);
     setNewTask("");
+  }
+
+  function deleteTask(id) {
+    const newArray = tasks.filter(task => task.id !==id);
+    setTasks(newArray);
   }
 
   return (
@@ -30,7 +35,7 @@ function App() {
         type='text' 
         placeholder='What to do?'
         value={newTask}
-        onChange={e => setNewTask(e.target.value)}></input>
+        onChange={e => setNewTask(e.target.value)}/>
         <button className='btnTodo'
         onClick={() => addTask()}>Add to list</button>
       </div>
@@ -38,8 +43,8 @@ function App() {
         <ul>
           {tasks.map(task => {
             return(
-              <li key={task.id}>{task.value}</li>
-            )
+              <li key={task.id}>{task.value} <button onClick={() => deleteTask(task.id)}>Delete</button></li>
+            );
           })}
         </ul>
       </div>
