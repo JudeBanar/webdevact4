@@ -5,6 +5,9 @@ function App() {
 
   const [newTask, setNewTask] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [editTask, setEditTask] = useState({ id: null, value: '' });
+
 
   function addTask() {
 
@@ -23,8 +26,26 @@ function App() {
   }
 
   function deleteTask(id) {
-    const newArray = tasks.filter(task => task.id !==id);
+    const newArray = tasks.filter(task => task.id !== id);
     setTasks(newArray);
+  }
+
+  function editTaskValue(id) {
+    const editedTask = tasks.find(task => task.id === id);
+    setEditTask({ id: editedTask.id, value: editedTask.value });
+    setEditMode(true);
+  }
+  
+  function updateTask() {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === editTask.id) {
+        return { ...task, value: editTask.value };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    setEditTask({ id: null, value: '' });
+    setEditMode(false);
   }
 
   return (
@@ -34,16 +55,19 @@ function App() {
         <input className='todoInput' 
         type='text' 
         placeholder='What to do?'
-        value={newTask}
-        onChange={e => setNewTask(e.target.value)}/>
+        value={editMode ? editTask.value : newTask}
+        onChange={e => editMode ? setEditTask({ ...editTask, value: e.target.value }) : setNewTask(e.target.value)}/>
         <button className='btnTodo'
-        onClick={() => addTask()}>Add to list</button>
+        onClick={() => editMode ? updateTask() : addTask()}>Add to list</button>
+
       </div>
       <div className='listTodo'>
         <ul>
           {tasks.map(task => {
             return(
-              <li key={task.id}>{task.value} <button onClick={() => deleteTask(task.id)}>Delete</button></li>
+              <li key={task.id}>{task.value} 
+              <button onClick={() => deleteTask(task.id)}>Delete</button> 
+              <button onClick={() => editTaskValue(task.id)}>Edit</button></li>
             );
           })}
         </ul>
