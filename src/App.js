@@ -59,15 +59,16 @@ function App() {
         onChange={e => editMode ? setEditTask({ ...editTask, value: e.target.value }) : setNewTask(e.target.value)}/>
         <button className='btnTodo'
         onClick={() => editMode ? updateTask() : addTask()}>Add to list</button>
-
       </div>
       <div className='listTodo'>
-        <ul>
+        <ul className='ToDo'
+        style={{ listStyleType: 'none' }}>
           {tasks.map(task => {
             return(
-              <li key={task.id}>{task.value} 
-              <button onClick={() => deleteTask(task.id)}>Delete</button> 
-              <button onClick={() => editTaskValue(task.id)}>Edit</button></li>
+              <li className='taskName' key={task.id}>
+              <button className='btnTask' onClick={() => deleteTask(task.id)}>Delete</button> 
+              <button className='btnTask' onClick={() => editTaskValue(task.id)}>Edit</button>
+              {task.value}</li>
             );
           })}
         </ul>
